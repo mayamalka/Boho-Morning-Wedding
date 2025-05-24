@@ -94,16 +94,16 @@ export default function WeddingSite() {
             Playlist
           </button>
           <button
-            onClick={() => scrollToSection(timelineRef)}
-            className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
-          >
-            Timeline
-          </button>
-          <button
             onClick={() => scrollToSection(dressCodeRef)}
             className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
           >
             Dress Code
+          </button>
+          <button
+            onClick={() => scrollToSection(timelineRef)}
+            className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+          >
+            Timeline
           </button>
           <button
             onClick={() => scrollToSection(photosRef)}
