@@ -6,8 +6,11 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { ChefHat, HandPlatter, Music, PartyPopper } from "lucide-react";
 import VideoOverlay from '@/components/ui/videoOverlay';
+import { useRouter } from "next/navigation";
 
 export default function WeddingSite() {
+
+  const router = useRouter();
 
   // References for section navigation
   const saveTheDateRef = useRef<HTMLDivElement>(null);
@@ -27,22 +30,34 @@ export default function WeddingSite() {
     }
   };
 
-const [showOverlay, setShowOverlay] = useState(false);
-const [hasMounted, setHasMounted] = useState(false);
+  const [allowed, setAllowed] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
-useEffect(() => {
-  if (!hasMounted) {
-    setHasMounted(true);
-    if (!sessionStorage.getItem('videoOverlayShown')) {
-      setShowOverlay(true);
-      sessionStorage.setItem('videoOverlayShown', 'true');
+  useEffect(() => {
+    if (!hasMounted) {
+      setHasMounted(true);
+      if (!sessionStorage.getItem('videoOverlayShown')) {
+        setShowOverlay(true);
+        sessionStorage.setItem('videoOverlayShown', 'true');
+      }
     }
-  }
-}, [hasMounted]);
+  }, [hasMounted]);
 
-const handleOverlayClose = () => {
-  setShowOverlay(false);
-};
+  const handleOverlayClose = () => {
+    setShowOverlay(false);
+  };
+
+  useEffect(() => {
+    const access = localStorage.getItem("weddingAccess");
+    if (access === "true") {
+      setAllowed(true);
+    } else {
+      router.replace("/");
+    }
+  }, [router]);
+
+  if (!allowed) return null;
 
   return (
     <div className={`relative ${showOverlay ? 'pointer-events-none' : ''}`}>

@@ -11,13 +11,13 @@ export default function PasswordEntrance() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // The secret word to enter the wedding site
-  const SECRET_WORD = "love"; // You can change this to any secret word you'd like
+  const SECRET_WORD = "love"; // Change as needed
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password.toLowerCase() === SECRET_WORD.toLowerCase()) {
+      localStorage.setItem("weddingAccess", "true");
       router.push("/wedding");
     } else {
       setError("Incorrect password. Please try again.");
