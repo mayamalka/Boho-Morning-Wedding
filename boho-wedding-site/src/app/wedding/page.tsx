@@ -276,10 +276,11 @@ export default function WeddingSite() {
                 <div className="flex items-center">
                   <div className="w-1/2 pr-10 text-right">
                     {/* Black icon: Rings */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <circle cx="12" cy="12" r="6" strokeWidth={1} />
-                      <circle cx="8" cy="12" r="6" strokeWidth={1} />
-                    </svg>
+                    <img
+                      src="/wedding-rings.svg"
+                      alt="Wedding Rings"
+                      className="h-16 w-16 ml-auto"
+                    />
                   </div>
                   <div className="absolute left-1/2 -ml-4 w-8 h-8 bg-white border-2 border-sky-200 rounded-full flex items-center justify-center">
                     {/* Blue icon: Heart */}
@@ -315,6 +316,11 @@ export default function WeddingSite() {
                 <div className="flex items-center">
                   <div className="w-1/2 pr-10 text-right">
                     {/* Black icon: Dancing couple */}
+                    <img
+                      src="/dancing-couple.svg"
+                      alt="Dancing Couple"
+                      className="h-16 w-16 ml-auto"
+                    />
                   </div>
                   <div className="absolute left-1/2 -ml-4 w-8 h-8 bg-white border-2 border-sky-200 rounded-full flex items-center justify-center">
                     {/* Blue icon: Music note */}
