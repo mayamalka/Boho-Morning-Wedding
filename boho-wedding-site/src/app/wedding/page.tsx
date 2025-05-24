@@ -168,7 +168,7 @@ export default function WeddingSite() {
                       height={20}
                       className="object-contain"
                     />
-                    Google Maps
+                    Maps
                   </Button>
                 </div>
               </div>
