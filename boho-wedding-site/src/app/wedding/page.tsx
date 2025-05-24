@@ -1,23 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog";
 import Image from "next/image";
 import { ChefHat, HandPlatter, Music, PartyPopper, UtensilsCrossed } from "lucide-react";
 
 export default function WeddingSite() {
-  const [songName, setSongName] = useState("");
-  const [artistName, setArtistName] = useState("");
-  const [songAdded, setSongAdded] = useState(false);
 
   // References for section navigation
   const saveTheDateRef = useRef<HTMLDivElement>(null);
@@ -34,18 +23,6 @@ export default function WeddingSite() {
       const yOffset = -100; // Offset to position the section below the navbar
       const y = ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  };
-
-  const handleAddSong = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (songName && artistName) {
-      setSongAdded(true);
-      setTimeout(() => {
-        setSongAdded(false);
-        setSongName("");
-        setArtistName("");
-      }, 3000);
     }
   };
 
