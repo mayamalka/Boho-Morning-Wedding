@@ -141,6 +141,36 @@ export default function WeddingSite() {
               <div>
                 <h3 className="text-sky-400 text-2xl font-['Cormorant_Garamond'] mb-2">Where • <span className="font-['Amatic_SC'] font-bold">איפה</span></h3>
                 <p className="font-['Montserrat'] text-xl">Tel Ya • <span className="font-['Heebo'] font-light">תל יה</span></p>
+
+                {/* Navigation Buttons */}
+                <div className="flex gap-3 justify-center">
+                  <Button
+                    onClick={() => window.open("https://waze.com/ul?q=תל-יה גן אירועים בשרון", "_blank")}
+                    className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 flex items-center gap-2"
+                  >
+                    <Image
+                      src="/images/waze-icon.png"
+                      alt="Waze"
+                      width={20}
+                      height={20}
+                      className="object-contain"
+                    />
+                    Waze
+                  </Button>
+                  <Button
+                    onClick={() => window.open("https://maps.app.goo.gl/oqydMYaL4VU1c4VeA", "_blank")}
+                    className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 flex items-center gap-2"
+                  >
+                    <Image
+                      src="/images/google-maps-icon.png"
+                      alt="Google Maps"
+                      width={20}
+                      height={20}
+                      className="object-contain"
+                    />
+                    Google Maps
+                  </Button>
+                </div>
               </div>
             </div>
 
