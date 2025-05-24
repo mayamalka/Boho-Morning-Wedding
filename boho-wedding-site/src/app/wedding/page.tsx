@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { ChefHat, HandPlatter, Music, PartyPopper, UtensilsCrossed } from "lucide-react";
+import { ChefHat, HandPlatter, Music, PartyPopper } from "lucide-react";
 
 export default function WeddingSite() {
 
@@ -315,7 +315,11 @@ export default function WeddingSite() {
                   </div>
                   <div className="w-1/2 pl-10">
                     {/* Black icon: Fork/knife */}
-                    <UtensilsCrossed className="h-10 w-10 text-gray-400" strokeWidth={1} />
+                    <img
+                      src="/fork-butter-knife-eating.svg"
+                      alt="Fork and Knife"
+                      className="h-12 w-12"
+                    />
                   </div>
                 </div>
 
@@ -360,7 +364,7 @@ export default function WeddingSite() {
                 <div className="flex items-center">
                   <div className="w-1/2 pr-10 text-right">
                     {/* Black icon: Cake */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
                     </svg>
                   </div>
@@ -387,7 +391,7 @@ export default function WeddingSite() {
                   </div>
                   <div className="w-1/2 pl-10">
                     {/* Black icon: Party Popper */}
-                    <PartyPopper className="h-12 w-12 text-gray-400" strokeWidth={1} />
+                    <PartyPopper className="h-14 w-14 text-gray-400" strokeWidth={1} />
                   </div>
                 </div>
 
