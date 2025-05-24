@@ -348,7 +348,7 @@ export default function WeddingSite() {
                   </div>
                   <div className="w-1/2 pl-10">
                     {/* Black icon: Fork/knife */}
-                    <UtensilsCrossed className="h-4 w-4 text-sky-400" />
+                    <UtensilsCrossed className="h-10 w-10 text-gray-400 ml-auto" strokeWidth={1} />
                   </div>
                 </div>
 
