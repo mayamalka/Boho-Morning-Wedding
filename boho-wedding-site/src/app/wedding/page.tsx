@@ -12,6 +12,7 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import Image from "next/image";
+import { ChefHat, UtensilsCrossed } from "lucide-react";
 
 export default function WeddingSite() {
   const [songName, setSongName] = useState("");
@@ -28,7 +29,7 @@ export default function WeddingSite() {
   const photosRef = useRef<HTMLDivElement>(null);
 
   // Function to scroll to a section
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     if (ref.current) {
       const yOffset = -100; // Offset to position the section below the navbar
       const y = ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -343,22 +344,11 @@ export default function WeddingSite() {
                   </div>
                   <div className="absolute left-1/2 -ml-4 w-8 h-8 bg-white border-2 border-sky-200 rounded-full flex items-center justify-center">
                     {/* Blue icon: Chef hat */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-sky-400" viewBox="0 0 512 512" transform="rotate(180)">
-                      <path d="M284.7 489c-31.6-5.8-59.3-20.4-82.9-44.1l-12.6-12.6-7.4 1.4c-11.9 2.3-36.7 1.3-49.3-2.1-53-14.3-89.5-63.7-87.2-118.1 1.9-43 26.5-81.4 64.4-100.3l7.3-3.6v-91.1c0-82.6.2-91.3 1.6-93.4 3.7-5.3-.8-5.1 126.5-5.1 130.9 0 123.1-.4 126.3 6.5 1.4 2.9 1.6 12.7 1.6 85.3v81.9l9 4.6c36.1 18.5 64.1 51 76.9 89.2 5.9 17.6 7.5 28.1 7.5 48.5.1 20.4-1.1 28.6-6.5 46.5-11.9 39-40 72.4-76.9 91.4-13.6 7-22.7 10.4-37 13.8-15 3.6-45.3 4.2-61.3 1.3z" fill="currentColor"/>
-                    </svg>
+                    <ChefHat className="h-4 w-4 text-sky-400" />
                   </div>
                   <div className="w-1/2 pl-10">
                     {/* Black icon: Fork/knife */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400" width="256" height="256" viewBox="0 0 660 400">
-                      <path d="M1890 3892 c-47 -25 -73 -75 -65 -127 12 -78 105 -386 139 -460 49
--105 196 -374 446 -810 159 -279 224 -383 262 -422 52 -53 144 -105 208 -118
-80 -17 157 -69 204 -139 19 -28 217 -400 441 -826 224 -426 419 -790 433 -808
-52 -68 153 -93 238 -57 51 21 83 51 105 100 42 92 23 144 -153 416 -525 812
--2037 3143 -2067 3186 -58 83 -117 104 -191 65z" fill="currentColor"/>
-                      <path d="M2540 1089 c-267 -358 -495 -669 -507 -691 -43 -77 -23 -188 43 -250
-77 -72 181 -63 279 23 20 18 93 124 164 238 230 370 584 955 602 996 32 69 25
-122 -27 224 -26 50 -51 95 -58 100 -8 6 -159 -189 -496 -640z" fill="currentColor"/>
-                    </svg>
+                    <UtensilsCrossed className="h-4 w-4 text-sky-400" />
                   </div>
                 </div>
 
@@ -461,9 +451,7 @@ l109 243 22 179 c12 99 24 190 27 203 l4 22 278 -2 277 -3 8 -83z"/>
                   </div>
                   <div className="absolute left-1/2 -ml-4 w-8 h-8 bg-white border-2 border-sky-200 rounded-full flex items-center justify-center">
                     {/* Blue icon: Chef hat */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-sky-400" viewBox="0 0 512 512" transform="rotate(180)">
-                      <path d="M284.7 489c-31.6-5.8-59.3-20.4-82.9-44.1l-12.6-12.6-7.4 1.4c-11.9 2.3-36.7 1.3-49.3-2.1-53-14.3-89.5-63.7-87.2-118.1 1.9-43 26.5-81.4 64.4-100.3l7.3-3.6v-91.1c0-82.6.2-91.3 1.6-93.4 3.7-5.3-.8-5.1 126.5-5.1 130.9 0 123.1-.4 126.3 6.5 1.4 2.9 1.6 12.7 1.6 85.3v81.9l9 4.6c36.1 18.5 64.1 51 76.9 89.2 5.9 17.6 7.5 28.1 7.5 48.5.1 20.4-1.1 28.6-6.5 46.5-11.9 39-40 72.4-76.9 91.4-13.6 7-22.7 10.4-37 13.8-15 3.6-45.3 4.2-61.3 1.3z" fill="currentColor"/>
-                    </svg>
+                    <ChefHat className="h-4 w-4 text-sky-400" />
                   </div>
                   <div className="w-1/2 pl-10">
                     {/* Black icon: Chicken */}
@@ -483,9 +471,7 @@ l109 243 22 179 c12 99 24 190 27 203 l4 22 278 -2 277 -3 8 -83z"/>
                   </div>
                   <div className="absolute left-1/2 -ml-4 w-8 h-8 bg-white border-2 border-sky-200 rounded-full flex items-center justify-center">
                     {/* Blue icon: Chef hat */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-sky-400" viewBox="0 0 512 512" transform="rotate(180)">
-                      <path d="M284.7 489c-31.6-5.8-59.3-20.4-82.9-44.1l-12.6-12.6-7.4 1.4c-11.9 2.3-36.7 1.3-49.3-2.1-53-14.3-89.5-63.7-87.2-118.1 1.9-43 26.5-81.4 64.4-100.3l7.3-3.6v-91.1c0-82.6.2-91.3 1.6-93.4 3.7-5.3-.8-5.1 126.5-5.1 130.9 0 123.1-.4 126.3 6.5 1.4 2.9 1.6 12.7 1.6 85.3v81.9l9 4.6c36.1 18.5 64.1 51 76.9 89.2 5.9 17.6 7.5 28.1 7.5 48.5.1 20.4-1.1 28.6-6.5 46.5-11.9 39-40 72.4-76.9 91.4-13.6 7-22.7 10.4-37 13.8-15 3.6-45.3 4.2-61.3 1.3z" fill="currentColor"/>
-                    </svg>
+                    <ChefHat className="h-4 w-4 text-sky-400" />
                   </div>
                   <div className="w-1/2 pl-10">
                     <p className="font-['Montserrat'] font-medium text-lg">4:00 PM</p>
