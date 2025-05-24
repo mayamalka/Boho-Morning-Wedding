@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 
 export default function PasswordEntrance() {
   const [password, setPassword] = useState("");

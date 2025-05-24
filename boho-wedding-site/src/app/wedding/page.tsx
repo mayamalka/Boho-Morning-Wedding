@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -27,11 +27,22 @@ export default function WeddingSite() {
     }
   };
 
-  const [showOverlay, setShowOverlay] = useState(true);
+const [showOverlay, setShowOverlay] = useState(false);
+const [hasMounted, setHasMounted] = useState(false);
 
-  const handleOverlayClose = () => {
-    setShowOverlay(false);
-  };
+useEffect(() => {
+  if (!hasMounted) {
+    setHasMounted(true);
+    if (!sessionStorage.getItem('videoOverlayShown')) {
+      setShowOverlay(true);
+      sessionStorage.setItem('videoOverlayShown', 'true');
+    }
+  }
+}, [hasMounted]);
+
+const handleOverlayClose = () => {
+  setShowOverlay(false);
+};
 
   return (
     <div className={`relative ${showOverlay ? 'pointer-events-none' : ''}`}>
