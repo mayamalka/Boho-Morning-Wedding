@@ -519,11 +519,6 @@ export default function WeddingSite() {
           </div>
         </div>
       </div>
-      <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">Welcome to the Main Page</h1>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Action 1</button>
-        <button className="bg-green-500 text-white px-4 py-2 rounded">Action 2</button>
-      </div>
     </div>
   );
 }
