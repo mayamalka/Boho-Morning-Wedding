@@ -157,7 +157,7 @@ export default function WeddingSite() {
                   {/* Navigation Buttons */}
                   <div className="flex gap-3 justify-center">
                     <Button
-                      onClick={() => window.open("https://waze.com/ul?q=תל-יה גן אירועים בשרון", "_blank")}
+                      onClick={() => window.open("https://waze.com/ul/hsv8z3xf2q" , "_blank")}
                       className="bg-sky-300 hover:bg-sky-400 text-white px-4 py-2 flex items-center gap-2"
                     >
                       <Image
