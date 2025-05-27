@@ -30,6 +30,12 @@ export default function WeddingSite() {
     }
   };
 
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
+  const handleClick = () => {
+    linkRef.current?.click();
+  };
+
   const [allowed, setAllowed] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -258,7 +264,7 @@ export default function WeddingSite() {
               <div className="text-center mb-6">
                 <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-2">Dress Code • <span className="font-['Amatic_SC'] font-bold">קוד לבוש</span></h2>
                 <h3 className="text-2xl font-['Great_Vibes'] text-gray-700 mb-1">What to Wear</h3>
-                <p className="font-['Heebo'] text-sm font-light mb-8">לבוש חגיגי בצבעי פסטל</p>
+                <p className="font-['Heebo'] text-sm font-light mb-8">לבוש פורמלי בצבעי פסטל</p>
               </div>
 
               {/* Single line of circles that are smaller on mobile */}
@@ -279,6 +285,24 @@ export default function WeddingSite() {
               <p className="text-center mt-1 font-['Heebo'] text-sm text-gray-600 font-light">
                 זוהי חתונת בוקר, כך שצבעים בהירים מושלמים לאירוע!
               </p>
+              <p className="text-center mt-4 font-['Montserrat'] text-sm text-gray-600 italic">
+                and the perfect addition - convertable heels! so you could dance with us all day
+              </p>
+              <p className="text-center mt-1 font-['Heebo'] text-sm text-gray-600 font-light">
+                ועוד דבר שיכול לשדרג את האאוטפיט - עקבים שהופכים לנעל שטוחה! שתוכלו לרקוד איתנו במהלך כל האירוע 
+              </p>
+              <div className="text-center mt-1 font-['Heebo'] text-lg font-bold text-sky-300 underline cursor-pointer">
+                <button onClick={handleClick}>לחצו כאן ל25% הנחה שארגנתי לכן</button>
+                <a
+                  href="https://pashionfootwear.com/pages/ambassador-storefront?lc_ambassador_id=Y3VzdG9tZXI6NjQ0MjI1MA"
+                  ref={linkRef}
+                  style={{ display: 'none' }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  pashionfootwear
+                </a>
+              </div>
             </Card>
           </div>
 
