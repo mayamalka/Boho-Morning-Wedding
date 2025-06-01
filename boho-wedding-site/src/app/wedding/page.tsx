@@ -94,55 +94,57 @@ export default function WeddingSite() {
 
         {/* Navigation Menu */}
         <div className="sticky top-0 z-50 bg-white/85 shadow-sm border-b border-sky-100 py-3">
-          <div className="max-w-6xl w-full mx-auto px-4 flex flex-nowrap justify-start gap-4 overflow-x-auto scrolling-touch">
-            <button
-              onClick={() => scrollToSection(saveTheDateRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Save the Date
-            </button>
-            <button
-              onClick={() => scrollToSection(rsvpRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              RSVP
-            </button>
-            <button
-              onClick={() => scrollToSection(playlistRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Playlist
-            </button>
-            <button
-              onClick={() => scrollToSection(dressCodeRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Dress Code
-            </button>
-            <button
-              onClick={() => scrollToSection(timelineRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Timeline
-            </button>
-            <button
-              onClick={() => scrollToSection(photosRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Photos
-            </button>
-            <button
-              onClick={() => scrollToSection(ourStoryRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Our Story
-            </button>
-            <button
-              onClick={() => scrollToSection(galleryRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
-            >
-              Gallery
-            </button>
+          <div className="max-w-6xl w-full mx-auto px-4 overflow-x-auto scrolling-touch text-center">
+            <div className="inline-flex flex-nowrap justify-start gap-4">
+              <button
+                onClick={() => scrollToSection(saveTheDateRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Save the Date
+              </button>
+              <button
+                onClick={() => scrollToSection(rsvpRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                RSVP
+              </button>
+              <button
+                onClick={() => scrollToSection(playlistRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Playlist
+              </button>
+              <button
+                onClick={() => scrollToSection(dressCodeRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Dress Code
+              </button>
+              <button
+                onClick={() => scrollToSection(timelineRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Timeline
+              </button>
+              <button
+                onClick={() => scrollToSection(photosRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Photos
+              </button>
+              <button
+                onClick={() => scrollToSection(ourStoryRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Our Story
+              </button>
+              <button
+                onClick={() => scrollToSection(galleryRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Gallery
+              </button>
+            </div>
           </div>
         </div>
 
