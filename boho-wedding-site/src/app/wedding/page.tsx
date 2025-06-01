@@ -94,48 +94,54 @@ export default function WeddingSite() {
 
         {/* Navigation Menu */}
         <div className="sticky top-0 z-50 bg-white/85 shadow-sm border-b border-sky-100 py-3">
-          <div className="max-w-4xl mx-auto px-4 flex flex-wrap justify-center gap-2 md:gap-8">
+          <div className="max-w-6xl w-full mx-auto px-4 flex flex-nowrap justify-start gap-4 overflow-x-auto scrolling-touch">
             <button
               onClick={() => scrollToSection(saveTheDateRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               Save the Date
             </button>
             <button
               onClick={() => scrollToSection(rsvpRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               RSVP
             </button>
             <button
               onClick={() => scrollToSection(playlistRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               Playlist
             </button>
             <button
               onClick={() => scrollToSection(dressCodeRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               Dress Code
             </button>
             <button
               onClick={() => scrollToSection(timelineRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               Timeline
             </button>
             <button
               onClick={() => scrollToSection(photosRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               Photos
             </button>
             <button
               onClick={() => scrollToSection(ourStoryRef)}
-              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1"
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
             >
               Our Story
+            </button>
+            <button
+              onClick={() => scrollToSection(galleryRef)}
+              className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+            >
+              Gallery
             </button>
           </div>
         </div>
@@ -511,7 +517,7 @@ export default function WeddingSite() {
 
           {/* About Us Section */}
           <div ref={ourStoryRef} className="pt-16 -mt-16" id="our-story">
-            <Card className="p-8 text-center bg-white/85 border border-sky-100 shadow-lg">
+            <Card className="p-8 text-center mb-10 bg-white/85 border border-sky-100 shadow-lg">
               <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-4">Our Story • <span className="font-['Amatic_SC'] font-bold">הסיפור שלנו</span></h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-6">
