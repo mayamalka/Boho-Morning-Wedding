@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
-import { X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface Photo {
   src: string;
@@ -47,11 +53,56 @@ const categories = [
 
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const filteredPhotos = selectedCategory === "all"
-    ? galleryPhotos
-    : galleryPhotos.filter(photo => photo.category === selectedCategory);
+  const filteredPhotos =
+    selectedCategory === "all"
+      ? galleryPhotos
+      : galleryPhotos.filter((photo) => photo.category === selectedCategory);
+
+  const selectedPhoto =
+    selectedIndex !== null ? filteredPhotos[selectedIndex] : null;
+
+  const goPrevious = useCallback(() => {
+    if (selectedIndex !== null) {
+      setSelectedIndex((prev) =>
+        prev! > 0 ? prev! - 1 : filteredPhotos.length - 1
+      );
+    }
+  }, [selectedIndex, filteredPhotos.length]);
+
+  const goNext = useCallback(() => {
+    if (selectedIndex !== null) {
+      setSelectedIndex((prev) =>
+        prev! < filteredPhotos.length - 1 ? prev! + 1 : 0
+      );
+    }
+  }, [selectedIndex, filteredPhotos.length]);
+
+  const closeDialog = useCallback(() => {
+    setSelectedIndex(null);
+  }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (selectedIndex === null) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goPrevious();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goNext();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        closeDialog();
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedIndex, goPrevious, goNext, closeDialog]);
 
   return (
     <Card className="p-8 mb-10 bg-white/85 border border-sky-100 shadow-lg">
@@ -71,7 +122,10 @@ export default function Gallery() {
           {categories.map((category) => (
             <button
               key={category.key}
-              onClick={() => setSelectedCategory(category.key)}
+              onClick={() => {
+                setSelectedCategory(category.key);
+                setSelectedIndex(null);
+              }}
               className={`px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-['Montserrat'] transition-colors ${
                 selectedCategory === category.key
                   ? "bg-sky-300 text-white"
@@ -93,7 +147,16 @@ export default function Gallery() {
             <div
               key={`${photo.category}-${photo.src}-${index}`}
               className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg"
-              onClick={() => setSelectedPhoto(photo)}
+              onClick={() => setSelectedIndex(index)}
+              tabIndex={0}
+              role="button"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelectedIndex(index);
+                }
+              }}
+              aria-label={`Open ${photo.alt}`}
             >
               <Image
                 src={photo.src}
@@ -121,24 +184,47 @@ export default function Gallery() {
       )}
 
       {/* Photo Modal */}
-      <Dialog open={!!selectedPhoto} onOpenChange={() => setSelectedPhoto(null)}>
+      <Dialog open={selectedPhoto !== null} onOpenChange={closeDialog}>
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 bg-black/90 border-none">
-          <div className="relative w-full h-full">
-            <DialogClose className="absolute top-4 right-4 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-              <X className="h-4 w-4 text-white" />
-            </DialogClose>
-            {selectedPhoto && (
-              <div className="relative w-full h-[80vh] flex items-center justify-center">
-                <Image
-                  src={selectedPhoto.src}
-                  alt={selectedPhoto.alt}
-                  fill
-                  className="object-contain"
-                  sizes="90vw"
-                />
-              </div>
-            )}
-          </div>
+        <div className="relative w-full h-full">
+          <DialogTitle>
+            <VisuallyHidden>Photo preview modal</VisuallyHidden>
+          </DialogTitle>
+
+          <DialogClose className="absolute top-4 right-4 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
+            <X className="h-4 w-4 text-white" />
+          </DialogClose>
+
+          {selectedPhoto && (
+            <div className="relative w-full h-[80vh] flex items-center justify-center">
+              {/* Previous Button */}
+              <button
+                onClick={goPrevious}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft className="text-white w-5 h-5" />
+              </button>
+
+              <Image
+                src={selectedPhoto.src}
+                alt={selectedPhoto.alt}
+                fill
+                className="object-contain"
+                sizes="90vw"
+              />
+
+              {/* Next Button */}
+              <button
+                onClick={goNext}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
+                aria-label="Next photo"
+              >
+                <ChevronRight className="text-white w-5 h-5" />
+              </button>
+            </div>
+          )}
+        </div>
         </DialogContent>
       </Dialog>
     </Card>
