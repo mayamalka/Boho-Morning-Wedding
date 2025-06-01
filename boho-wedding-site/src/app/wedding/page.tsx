@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { ChefHat, HandPlatter, Music, PartyPopper } from "lucide-react";
 import VideoOverlay from '@/components/ui/videoOverlay';
+import Gallery from "@/components/ui/gallery";
 import { useRouter } from "next/navigation";
 
 export default function WeddingSite() {
@@ -20,6 +21,7 @@ export default function WeddingSite() {
   const playlistRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const photosRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   // Function to scroll to a section
   const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
@@ -549,6 +551,10 @@ export default function WeddingSite() {
                 </div>
               </div>
             </Card>
+          </div>
+          {/* Gallery Section */}
+          <div ref={galleryRef} className="pt-16 -mt-16" id="gallery">
+            <Gallery />
           </div>
         </div>
       </div>
