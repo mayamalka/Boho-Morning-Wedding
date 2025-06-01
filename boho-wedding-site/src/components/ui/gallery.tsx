@@ -55,6 +55,10 @@ export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
+  // Touch positions for swipe
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+
   const filteredPhotos =
     selectedCategory === "all"
       ? galleryPhotos
@@ -186,45 +190,62 @@ export default function Gallery() {
       {/* Photo Modal */}
       <Dialog open={selectedPhoto !== null} onOpenChange={closeDialog}>
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 bg-black/90 border-none">
-        <div className="relative w-full h-full">
-          <DialogTitle>
-            <VisuallyHidden>Photo preview modal</VisuallyHidden>
-          </DialogTitle>
+          <div
+            className="relative w-full h-full"
+            onTouchStart={(e) => setTouchStartX(e.changedTouches[0].screenX)}
+            onTouchMove={(e) => setTouchEndX(e.changedTouches[0].screenX)}
+            onTouchEnd={() => {
+              if (touchStartX !== null && touchEndX !== null) {
+                const distance = touchStartX - touchEndX;
+                const threshold = 50; // minimum swipe distance
+                if (distance > threshold) {
+                  goNext();
+                } else if (distance < -threshold) {
+                  goPrevious();
+                }
+              }
+              setTouchStartX(null);
+              setTouchEndX(null);
+            }}
+          >
+            <DialogTitle>
+              <VisuallyHidden>Photo preview modal</VisuallyHidden>
+            </DialogTitle>
 
-          <DialogClose className="absolute top-4 right-4 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-            <X className="h-4 w-4 text-white" />
-          </DialogClose>
+            <DialogClose className="absolute top-4 right-4 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
+              <X className="h-4 w-4 text-white" />
+            </DialogClose>
 
-          {selectedPhoto && (
-            <div className="relative w-full h-[80vh] flex items-center justify-center">
-              {/* Previous Button */}
-              <button
-                onClick={goPrevious}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
-                aria-label="Previous photo"
-              >
-                <ChevronLeft className="text-white w-5 h-5" />
-              </button>
+            {selectedPhoto && (
+              <div className="relative w-full h-[80vh] flex items-center justify-center">
+                {/* Previous Button */}
+                <button
+                  onClick={goPrevious}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
+                  aria-label="Previous photo"
+                >
+                  <ChevronLeft className="text-white w-5 h-5" />
+                </button>
 
-              <Image
-                src={selectedPhoto.src}
-                alt={selectedPhoto.alt}
-                fill
-                className="object-contain"
-                sizes="90vw"
-              />
+                <Image
+                  src={selectedPhoto.src}
+                  alt={selectedPhoto.alt}
+                  fill
+                  className="object-contain"
+                  sizes="90vw"
+                />
 
-              {/* Next Button */}
-              <button
-                onClick={goNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
-                aria-label="Next photo"
-              >
-                <ChevronRight className="text-white w-5 h-5" />
-              </button>
-            </div>
-          )}
-        </div>
+                {/* Next Button */}
+                <button
+                  onClick={goNext}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
+                  aria-label="Next photo"
+                >
+                  <ChevronRight className="text-white w-5 h-5" />
+                </button>
+              </div>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </Card>
