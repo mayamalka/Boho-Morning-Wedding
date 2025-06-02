@@ -1,6 +1,7 @@
+// File: components/Gallery.tsx
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import {
@@ -16,143 +17,138 @@ interface Photo {
   src: string;
   alt: string;
   category: string;
+  subfolder?: string;
 }
 
-const categories = [
-  { key: "all", label: "All Photos", labelHe: "כל התמונות" },
-  { key: "engagement", label: "Engagement", labelHe: "אירוסין" },
-  { key: "save-the-date", label: "save-the-date" },
-  { key: "ceremony", label: "Ceremony", labelHe: "טקס" },
-  { key: "reception", label: "Reception", labelHe: "קבלת פנים" },
-  { key: "dance", label: "dance", labelHe: "ריקודים" },
-  { key: "pre-wedding", label: "Pre-Wedding", labelHe: "לפני החתונה" },
-  { key: "couple", label: "Couple", labelHe: "זוג" },
-  { key: "pets", label: "pets", labelHe: "החיות שלנו" },
-];
+interface Group {
+  folder: string;    // For non-pets: same as category. For pets: subfolder name
+  photos: Photo[];
+}
 
 export default function Gallery() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  // ── Top‐Level Categories ──────────────────────────────────────────────────
+  const categories = [
+    { key: "all", label: "All Photos", labelHe: "כל התמונות" },
+    { key: "engagement", label: "Engagement", labelHe: "אירוסין" },
+    { key: "save-the-date", label: "Save-the-Date" },
+    { key: "ceremony", label: "Ceremony", labelHe: "טקס" },
+    { key: "reception", label: "Reception", labelHe: "קבלת פנים" },
+    { key: "dance", label: "Dance", labelHe: "ריקודים" },
+    { key: "pre-wedding", label: "Pre-Wedding", labelHe: "לפני החתונה" },
+    { key: "couple", label: "Couple", labelHe: "זוג" },
+    { key: "pets", label: "Pets", labelHe: 'בע"ח' },
+  ] as const;
 
-  // Touch positions for swipe
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  // ── Pets Subcategories ───────────────────────────────────────────────────
+  const [subcategories, setSubcategories] = useState<string[]>([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all");
+
+  // ── Fetched Groups ────────────────────────────────────────────────────────
+  // groups = [
+  //   { folder: "freddie", photos: Photo[] },
+  //   { folder: "genie", photos: Photo[] },
+  //   ...
+  // ]
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // ── Modal & Navigation States ──────────────────────────────────────────────
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
-  /**
-   * Helper: Given a GitHub folder name (category),
-   * fetches all files in that folder via GitHub API, filters to images,
-   * and returns an array of Photo objects.
-   */
-  async function fetchPhotosForCategory(catKey: string): Promise<Photo[]> {
-    // GitHub Contents API endpoint for a folder
-    const url = `https://api.github.com/repos/mayamalka/my-wedding-gallery/contents/${catKey}`;
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) {
-        console.error(`Failed to fetch folder "${catKey}" → ${res.status}`);
-        return [];
-      }
-      const items: Array<{
-        name: string;
-        path: string;
-        download_url: string | null;
-        type: string;
-      }> = await res.json();
-
-      // Filter only files with download_url (i.e. skip subfolders or non-files)
-      // and only common image extensions
-      return items
-        .filter(
-          (item) =>
-            item.type === "file" &&
-            item.download_url &&
-            /\.(jpe?g|png|gif|webp)$/i.test(item.name)
-        )
-        .map((item) => {
-          // Derive a human-friendly alt from the filename, e.g. "engagement1.jpg" → "Engagement1"
-          const rawName = item.name.replace(/\.[^.]+$/, ""); // remove extension
-          const altText = rawName.replace(/[-_]/g, " "); // replace dashes/underscores
-          const alt =
-            altText.charAt(0).toUpperCase() + altText.slice(1); // capitalize first letter
-
-          return {
-            src: item.download_url!,
-            alt,
-            category: catKey,
-          };
-        });
-    } catch (err) {
-      console.error("Error fetching GitHub folder:", err);
-      return [];
-    }
-  }
-
-  /**
-   * Whenever selectedCategory changes, load photos.
-   * - If "all": fetch each category folder (excluding "all") in parallel.
-   * - Otherwise: fetch just that one folder.
-   */
+  // ── Fetch from /api/photos when selectedCategory changes ───────────────────
   useEffect(() => {
-    async function loadPhotos() {
-      if (selectedCategory === "all") {
-        // Fetch each real category in parallel (excluding "all")
-        const realCats = categories
-          .map((c) => c.key)
-          .filter((key) => key !== "all");
+    async function fetchGroups() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/photos?category=${selectedCategory}`);
+        if (!res.ok) {
+          console.error(
+            "Failed to fetch photos for category:",
+            selectedCategory
+          );
+          setGroups([]);
+          setSubcategories([]);
+          return;
+        }
 
-        // Kick off all fetches simultaneously
-        const arraysOfPhotos = await Promise.all(
-          realCats.map((catKey) => fetchPhotosForCategory(catKey))
-        );
-        // Flatten into one big array
-        const combined = arraysOfPhotos.flat();
-        setPhotos(combined);
-      } else {
-        // Just fetch the single chosen category folder
-        const arr = await fetchPhotosForCategory(selectedCategory);
-        setPhotos(arr);
+        const data: { subfolders?: string[]; groups: Group[] } =
+          await res.json();
+
+        if (selectedCategory === "pets") {
+          const subs = data.subfolders || data.groups.map((g) => g.folder);
+          setSubcategories(subs);
+          setGroups(data.groups);
+        } else {
+          setSubcategories([]);
+          setGroups(data.groups);
+        }
+
+        setSelectedSubcategory("all");
+        setSelectedIndex(null);
+      } catch (err) {
+        console.error("Error fetching /api/photos:", err);
+        setGroups([]);
+        setSubcategories([]);
+      } finally {
+        setLoading(false);
       }
-      setSelectedIndex(null);
     }
 
-    loadPhotos();
+    fetchGroups();
   }, [selectedCategory]);
 
-  // The currently open photo in the modal
+  // ── Build a flat array of photos depending on subcategory ──────────────────
+  const flatPhotos: Photo[] = useMemo(() => {
+    if (groups.length === 0) return [];
+
+    if (selectedCategory === "pets") {
+      if (selectedSubcategory === "all") {
+        return groups.flatMap((g) => g.photos);
+      } else {
+        const found = groups.find((g) => g.folder === selectedSubcategory);
+        return found ? found.photos : [];
+      }
+    } else {
+      return groups[0]?.photos || [];
+    }
+  }, [groups, selectedCategory, selectedSubcategory]);
+
+  // ── Currently open photo in modal ─────────────────────────────────────────
   const selectedPhoto =
-    selectedIndex !== null && selectedIndex < photos.length
-      ? photos[selectedIndex]
+    selectedIndex !== null && selectedIndex < flatPhotos.length
+      ? flatPhotos[selectedIndex]
       : null;
 
-  // Navigate to previous photo in the filtered list
+  // ── Navigate to previous photo ─────────────────────────────────────────────
   const goPrevious = useCallback(() => {
-    if (selectedIndex !== null && photos.length > 0) {
+    if (selectedIndex !== null && flatPhotos.length > 0) {
       setSelectedIndex((prev) =>
-        prev! > 0 ? prev! - 1 : photos.length - 1
+        prev! > 0 ? prev! - 1 : flatPhotos.length - 1
       );
     }
-  }, [selectedIndex, photos.length]);
+  }, [selectedIndex, flatPhotos.length]);
 
-  // Navigate to next photo in the filtered list
+  // ── Navigate to next photo ─────────────────────────────────────────────────
   const goNext = useCallback(() => {
-    if (selectedIndex !== null && photos.length > 0) {
+    if (selectedIndex !== null && flatPhotos.length > 0) {
       setSelectedIndex((prev) =>
-        prev! < photos.length - 1 ? prev! + 1 : 0
+        prev! < flatPhotos.length - 1 ? prev! + 1 : 0
       );
     }
-  }, [selectedIndex, photos.length]);
+  }, [selectedIndex, flatPhotos.length]);
 
-  // Close the modal
+  // ── Close the modal ─────────────────────────────────────────────────────────
   const closeDialog = useCallback(() => {
     setSelectedIndex(null);
   }, []);
 
-  // Keyboard navigation inside the modal
+  // ── Keyboard navigation when modal is open ─────────────────────────────────
   useEffect(() => {
     if (selectedIndex === null) return;
-
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "ArrowLeft") {
         e.preventDefault();
@@ -165,13 +161,13 @@ export default function Gallery() {
         closeDialog();
       }
     }
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selectedIndex, goPrevious, goNext, closeDialog]);
 
   return (
     <Card className="p-8 mb-10 bg-white/85 border border-sky-100 shadow-lg">
+      {/* ── Header & Top‐Level Categories ─────────────────────────────────────── */}
       <div className="text-center mb-8">
         <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-2">
           Our Gallery •{" "}
@@ -208,57 +204,179 @@ export default function Gallery() {
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Photo Grid with Scroll */}
-      <div className="max-h-96 sm:max-h-[32rem] overflow-y-auto scrollbar-thin scrollbar-thumb-sky-200 scrollbar-track-transparent">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 pr-2">
-          {photos.map((photo, index) => (
-            <div
-              key={`${photo.src}-${index}`}
-              className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg"
-              onClick={() => setSelectedIndex(index)}
-              tabIndex={0}
-              role="button"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setSelectedIndex(index);
-                }
+        {/* ── Pets Subcategory Buttons ───────────────────────────────────────── */}
+        {selectedCategory === "pets" && subcategories.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-1 sm:gap-2 mb-6 sm:mb-8">
+            {/* “All Pets” Button */}
+            <button
+              onClick={() => {
+                setSelectedSubcategory("all");
+                setSelectedIndex(null);
               }}
-              aria-label={`Open ${photo.alt}`}
+              className={`px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-['Montserrat'] transition-colors ${
+                selectedSubcategory === "all"
+                  ? "bg-emerald-300 text-white"
+                  : "bg-emerald-50 text-emerald-400 hover:bg-emerald-100"
+              }`}
             >
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="
-                  (max-width: 640px) 50vw,
-                  (max-width: 768px) 33vw,
-                  (max-width: 1024px) 25vw,
-                  20vw
-                "
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-            </div>
-          ))}
-        </div>
+              <span className="hidden sm:inline">All Pets • </span>
+              <span className="sm:hidden">All Pets</span>
+            </button>
+
+            {subcategories.map((sub) => {
+              const label = sub.charAt(0).toUpperCase() + sub.slice(1);
+              return (
+                <button
+                  key={sub}
+                  onClick={() => {
+                    setSelectedSubcategory(sub);
+                    setSelectedIndex(null);
+                  }}
+                  className={`px-2 py-1 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-['Montserrat'] transition-colors ${
+                    selectedSubcategory === sub
+                      ? "bg-emerald-300 text-white"
+                      : "bg-emerald-50 text-emerald-400 hover:bg-emerald-100"
+                  }`}
+                >
+                  <span className="hidden sm:inline">{label} • </span>
+                  <span className="sm:hidden">{label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      {/* No photos message */}
-      {photos.length === 0 && (
+      {/* ── Loading State ─────────────────────────────────────────────────────── */}
+      {loading && (
         <div className="text-center py-12">
-          <p className="font-['Montserrat'] text-gray-500">
-            No photos in this category yet
-          </p>
-          <p className="font-['Heebo'] text-sm text-gray-500 font-light">
-            אין תמונות בקטגוריה זו עדיין
-          </p>
+          <p className="font-['Montserrat'] text-gray-500">Loading photos…</p>
         </div>
       )}
 
-      {/* Photo Modal */}
+      {/* ── Grouped Sections (Only when Pets & All) ────────────────────────────── */}
+      {!loading &&
+        selectedCategory === "pets" &&
+        selectedSubcategory === "all" &&
+        groups.length > 0 && (
+          <>
+            {groups.map((group) => {
+              if (group.photos.length === 0) return null;
+              const headingLabel =
+                group.folder.charAt(0).toUpperCase() + group.folder.slice(1);
+
+              return (
+                <div key={group.folder} className="mb-8">
+                  <h3 className="text-2xl font-['Cormorant_Garamond'] text-sky-400 mb-4">
+                    {headingLabel}
+                  </h3>
+                  <div className="max-h-96 sm:max-h-[32rem] overflow-y-auto scrollbar-thin scrollbar-thumb-sky-200 scrollbar-track-transparent">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 pr-2">
+                      {group.photos.map((photo, idx) => {
+                        // Compute flat index across all groups
+                        const idxOffset = groups
+                          .slice(0, groups.findIndex((g) => g.folder === group.folder))
+                          .reduce((sum, g) => sum + g.photos.length, 0);
+                        const flatIndex = idxOffset + idx;
+
+                        return (
+                          <div
+                            key={`${photo.src}-${flatIndex}`}
+                            className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg"
+                            onClick={() => setSelectedIndex(flatIndex)}
+                            tabIndex={0}
+                            role="button"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setSelectedIndex(flatIndex);
+                              }
+                            }}
+                            aria-label={`Open ${photo.alt}`}
+                          >
+                            <Image
+                              src={photo.src}
+                              alt={photo.alt}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              sizes="
+                                (max-width: 640px) 50vw,
+                                (max-width: 768px) 33vw,
+                                (max-width: 1024px) 25vw,
+                                20vw
+                              "
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        )}
+
+      {/* ── Flat Grid (Non‐Pets OR Single Subcategory) ─────────────────────────── */}
+      {!loading &&
+        ((selectedCategory !== "pets") ||
+          (selectedCategory === "pets" && selectedSubcategory !== "all")) && (
+          <>
+            {flatPhotos.length > 0 ? (
+              <div className="max-h-96 sm:max-h-[32rem] overflow-y-auto scrollbar-thin scrollbar-thumb-sky-200 scrollbar-track-transparent">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 pr-2">
+                  {flatPhotos.map((photo, index) => (
+                    <div
+                      key={`${photo.src}-${index}`}
+                      className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg"
+                      onClick={() => setSelectedIndex(index)}
+                      tabIndex={0}
+                      role="button"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedIndex(index);
+                        }
+                      }}
+                      aria-label={`Open ${photo.alt}`}
+                    >
+                      <Image
+                        src={photo.src}
+                        alt={photo.alt}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="
+                          (max-width: 640px) 50vw,
+                          (max-width: 768px) 33vw,
+                          (max-width: 1024px) 25vw,
+                          20vw
+                        "
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="font-['Montserrat'] text-gray-500">
+                  No photos in this{" "}
+                  {selectedCategory === "pets"
+                    ? selectedSubcategory
+                    : selectedCategory}{" "}
+                  yet
+                </p>
+                <p className="font-['Heebo'] text-sm text-gray-500 font-light">
+                  אין תמונות בקטגוריה זו עדיין
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
+      {/* ── Photo Modal ───────────────────────────────────────────────────────── */}
       <Dialog open={selectedPhoto !== null} onOpenChange={closeDialog}>
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 bg-black/90 border-none">
           <div
@@ -268,7 +386,7 @@ export default function Gallery() {
             onTouchEnd={() => {
               if (touchStartX !== null && touchEndX !== null) {
                 const distance = touchStartX - touchEndX;
-                const threshold = 50; // minimum swipe distance
+                const threshold = 50;
                 if (distance > threshold) {
                   goNext();
                 } else if (distance < -threshold) {
