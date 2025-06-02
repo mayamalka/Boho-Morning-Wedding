@@ -1,4 +1,3 @@
-// File: components/Gallery.tsx
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
@@ -21,7 +20,7 @@ interface Photo {
 }
 
 interface Group {
-  folder: string;    // For non-pets: same as category. For pets: subfolder name
+  folder: string; // For pets: subfolder name; otherwise same as category
   photos: Photo[];
 }
 
@@ -370,64 +369,69 @@ export default function Gallery() {
           </>
         )}
 
-      {/* ── Photo Modal ───────────────────────────────────────────────────────── */}
-      <Dialog open={selectedPhoto !== null} onOpenChange={closeDialog}>
-        <DialogContent className="max-w-4xl max-h-[90vh] p-0 bg-black/90 border-none">
-          <div
-            className="relative w-full h-full"
-            onTouchStart={(e) => setTouchStartX(e.changedTouches[0].screenX)}
-            onTouchMove={(e) => setTouchEndX(e.changedTouches[0].screenX)}
+      {/* ── Modal Dialog ────────────────────────────────────────────────────────── */}
+      <Dialog open={selectedIndex !== null} onOpenChange={closeDialog}>
+        <DialogContent
+          className="fixed top-1/2 left-1/2 max-w-[90vw] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 p-0 bg-transparent shadow-none overflow-visible"
+          aria-label="Photo viewer"
+          onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+          onTouchMove={(e) => setTouchEndX(e.touches[0].clientX)}
             onTouchEnd={() => {
               if (touchStartX !== null && touchEndX !== null) {
-                const distance = touchStartX - touchEndX;
-                const threshold = 50;
-                if (distance > threshold) {
-                  goNext();
-                } else if (distance < -threshold) {
+              const delta = touchEndX - touchStartX;
+              if (Math.abs(delta) > 40) {
+                if (delta > 0) {
                   goPrevious();
+                } else {
+                  goNext();
+                }
                 }
               }
               setTouchStartX(null);
               setTouchEndX(null);
             }}
           >
-            <DialogTitle>
-              <VisuallyHidden>Photo preview modal</VisuallyHidden>
-            </DialogTitle>
-
-            <DialogClose className="absolute top-4 right-4 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-              <X className="h-4 w-4 text-white" />
-            </DialogClose>
-
-            {selectedPhoto && (
-              <div className="relative w-full h-[80vh] flex items-center justify-center">
-                {/* Previous Button */}
+          <div className="relative flex items-center justify-center bg-black rounded-lg overflow-visible max-w-[90vw] max-h-[90vh] shadow-lg">
+            {/* Previous Button (outside image on the left) */}
                 <button
+              type="button"
                   onClick={goPrevious}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
+              className="absolute left-[-3rem] top-1/2 -translate-y-1/2 rounded-full bg-black/60 hover:bg-black/80 text-white p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
                   aria-label="Previous photo"
                 >
-                  <ChevronLeft className="text-white w-5 h-5" />
+              <ChevronLeft size={28} />
                 </button>
 
+            {/* Photo */}
+            {selectedPhoto && (
                 <Image
                   src={selectedPhoto.src}
                   alt={selectedPhoto.alt}
-                  fill
-                  className="object-contain"
-                  sizes="90vw"
-                />
+                width={800}
+                height={600}
+                className="max-w-[80vw] max-h-[80vh] object-contain rounded-md select-none"
+                draggable={false}
+                priority
+              />
+            )}
 
-                {/* Next Button */}
+            {/* Next Button (outside image on the right) */}
                 <button
+              type="button"
                   onClick={goNext}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 p-2 bg-white/20 hover:bg-white/30 rounded-full"
+              className="absolute right-[-3rem] top-1/2 -translate-y-1/2 rounded-full bg-black/60 hover:bg-black/80 text-white p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
                   aria-label="Next photo"
                 >
-                  <ChevronRight className="text-white w-5 h-5" />
+              <ChevronRight size={28} />
                 </button>
-              </div>
-            )}
+
+            {/* Close Button (top-right corner) */}
+            <DialogClose
+              className="absolute top-2 right-2 rounded-full bg-black/60 hover:bg-black/80 text-white p-1 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
+              aria-label="Close photo viewer"
+            >
+              <X size={20} />
+            </DialogClose>
           </div>
         </DialogContent>
       </Dialog>
