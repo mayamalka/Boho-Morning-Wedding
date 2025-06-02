@@ -157,7 +157,7 @@ export async function GET(request: Request) {
         )
         .map((i) => i.name);
 
-      let allPhotos: Photo[] = [];
+      const allPhotos: Photo[] = [];
       for (const cat of topCategories) {
         const cacheKey = cat;
         if (cache.has(cacheKey)) {
@@ -241,11 +241,14 @@ export async function GET(request: Request) {
         }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("API/photos error:", error);
-    return NextResponse.json(
-      { error: error.message || "Internal Server Error" },
-      { status: 500 }
-    );
+
+    let message = "Internal Server Error";
+    if (error instanceof Error) {
+      message = error.message;
+    }
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
