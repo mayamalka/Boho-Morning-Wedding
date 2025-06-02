@@ -372,12 +372,12 @@ export default function Gallery() {
       {/* ── Modal Dialog ────────────────────────────────────────────────────────── */}
       <Dialog open={selectedIndex !== null} onOpenChange={closeDialog}>
         <DialogContent
-          className="fixed top-1/2 left-1/2 max-w-[90vw] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 p-0 bg-transparent shadow-none overflow-visible"
+          className="fixed top-1/2 left-1/2 max-w-[90vw] max-h-[90vh] -translate-x-1/2 -translate-y-1/2 p-0 m-0 bg-transparent shadow-none border-none outline-none overflow-visible"
           aria-label="Photo viewer"
           onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
           onTouchMove={(e) => setTouchEndX(e.touches[0].clientX)}
-            onTouchEnd={() => {
-              if (touchStartX !== null && touchEndX !== null) {
+          onTouchEnd={() => {
+            if (touchStartX !== null && touchEndX !== null) {
               const delta = touchEndX - touchStartX;
               if (Math.abs(delta) > 40) {
                 if (delta > 0) {
@@ -385,56 +385,60 @@ export default function Gallery() {
                 } else {
                   goNext();
                 }
-                }
               }
-              setTouchStartX(null);
-              setTouchEndX(null);
-            }}
-          >
-            <DialogTitle>
-              <VisuallyHidden>Photo preview modal</VisuallyHidden>
-            </DialogTitle>
-          <div className="relative flex items-center justify-center bg-black rounded-lg overflow-visible max-w-[90vw] max-h-[90vh] shadow-lg">
-            {/* Previous Button (outside image on the left) */}
-                <button
-              type="button"
-                  onClick={goPrevious}
-              className="absolute left-[-3rem] top-1/2 -translate-y-1/2 rounded-full bg-black/60 hover:bg-black/80 text-white p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
-                  aria-label="Previous photo"
-                >
-              <ChevronLeft size={28} />
-                </button>
+            }
+            setTouchStartX(null);
+            setTouchEndX(null);
+          }}
+        >
+          <DialogTitle>
+            <VisuallyHidden>Photo preview modal</VisuallyHidden>
+          </DialogTitle>
 
-            {/* Photo */}
-            {selectedPhoto && (
+          <div className="relative flex items-center justify-center max-w-[90vw] max-h-[90vh]">
+            {/* Image Wrapper */}
+            <div className="relative">
+              {/* Photo */}
+              {selectedPhoto && (
                 <Image
                   src={selectedPhoto.src}
                   alt={selectedPhoto.alt}
-                width={800}
-                height={600}
-                className="max-w-[80vw] max-h-[80vh] object-contain rounded-md select-none"
-                draggable={false}
-                priority
-              />
-            )}
+                  width={800}
+                  height={600}
+                  className="max-w-[80vw] max-h-[80vh] object-contain select-none border-none bg-transparent"
+                  draggable={false}
+                  priority
+                />
+              )}
 
-            {/* Next Button (outside image on the right) */}
-                <button
-              type="button"
-                  onClick={goNext}
-              className="absolute right-[-3rem] top-1/2 -translate-y-1/2 rounded-full bg-black/60 hover:bg-black/80 text-white p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
-                  aria-label="Next photo"
-                >
-              <ChevronRight size={28} />
-                </button>
+              {/* Previous Button - just outside the left of the image */}
+              <button
+                type="button"
+                onClick={goPrevious}
+                className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 rounded-full bg-black/60 hover:bg-black/80 text-white p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft size={28} />
+              </button>
 
-            {/* Close Button (top-right corner) */}
-            <DialogClose
-              className="absolute top-2 right-2 rounded-full bg-black/60 hover:bg-black/80 text-white p-1 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
-              aria-label="Close photo viewer"
-            >
-              <X size={20} />
-            </DialogClose>
+              {/* Next Button - just outside the right of the image */}
+              <button
+                type="button"
+                onClick={goNext}
+                className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 rounded-full bg-black/60 hover:bg-black/80 text-white p-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
+                aria-label="Next photo"
+              >
+                <ChevronRight size={28} />
+              </button>
+
+              {/* Close Button - just outside top-right of the image */}
+              <DialogClose
+                className="absolute top-[-2rem] right-[-2rem] rounded-full bg-black/60 hover:bg-black/80 text-white p-1.5 shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
+                aria-label="Close photo viewer"
+              >
+                <X size={20} />
+              </DialogClose>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
