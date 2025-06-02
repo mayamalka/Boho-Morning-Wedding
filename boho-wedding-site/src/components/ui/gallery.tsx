@@ -391,6 +391,9 @@ export default function Gallery() {
               setTouchEndX(null);
             }}
           >
+            <DialogTitle>
+              <VisuallyHidden>Photo preview modal</VisuallyHidden>
+            </DialogTitle>
           <div className="relative flex items-center justify-center bg-black rounded-lg overflow-visible max-w-[90vw] max-h-[90vh] shadow-lg">
             {/* Previous Button (outside image on the left) */}
                 <button
