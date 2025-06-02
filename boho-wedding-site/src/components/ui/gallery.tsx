@@ -18,76 +18,138 @@ interface Photo {
   category: string;
 }
 
-const galleryPhotos: Photo[] = [
-  // Engagement Photos
-  { src: "/images/gallery/engagement/engagement1.jpg", alt: "Engagement Photo 1", category: "engagement" },
-  { src: "/images/gallery/engagement/engagement2.jpg", alt: "Engagement Photo 2", category: "engagement" },
-  { src: "/images/gallery/engagement/engagement3.jpg", alt: "Engagement Photo 3", category: "engagement" },
-
-//   // Pre-Wedding Photos
-//   { src: "/images/gallery/pre-wedding/pre-wedding1.jpg", alt: "Pre-Wedding Photo 1", category: "pre-wedding" },
-//   { src: "/images/gallery/pre-wedding/pre-wedding2.jpg", alt: "Pre-Wedding Photo 2", category: "pre-wedding" },
-
-//   // Ceremony Photos
-//   { src: "/images/gallery/ceremony/ceremony1.jpg", alt: "Ceremony Photo 1", category: "ceremony" },
-//   { src: "/images/gallery/ceremony/ceremony2.jpg", alt: "Ceremony Photo 2", category: "ceremony" },
-
-//   // Reception Photos
-//   { src: "/images/gallery/reception/reception1.jpg", alt: "Reception Photo 1", category: "reception" },
-//   { src: "/images/gallery/reception/reception2.jpg", alt: "Reception Photo 2", category: "reception" },
-
-  // Couple Photos
-  { src: "/images/gallery/pets/couple1.jpg", alt: "Couple Photo 1", category: "couple" },
-  { src: "/images/gallery/pets/couple2.jpg", alt: "Couple Photo 2", category: "couple" },
-  { src: "/images/gallery/pets/couple3.jpg", alt: "Couple Photo 3", category: "couple" },
-];
-
 const categories = [
   { key: "all", label: "All Photos", labelHe: "כל התמונות" },
   { key: "engagement", label: "Engagement", labelHe: "אירוסין" },
-  { key: "pre-wedding", label: "Pre-Wedding", labelHe: "לפני החתונה" },
+  { key: "save-the-date", label: "save-the-date" },
   { key: "ceremony", label: "Ceremony", labelHe: "טקס" },
   { key: "reception", label: "Reception", labelHe: "קבלת פנים" },
+  { key: "dance", label: "dance", labelHe: "ריקודים" },
+  { key: "pre-wedding", label: "Pre-Wedding", labelHe: "לפני החתונה" },
   { key: "couple", label: "Couple", labelHe: "זוג" },
+  { key: "pets", label: "pets", labelHe: "החיות שלנו" },
 ];
 
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   // Touch positions for swipe
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchEndX, setTouchEndX] = useState<number | null>(null);
 
-  const filteredPhotos =
-    selectedCategory === "all"
-      ? galleryPhotos
-      : galleryPhotos.filter((photo) => photo.category === selectedCategory);
+  /**
+   * Helper: Given a GitHub folder name (category),
+   * fetches all files in that folder via GitHub API, filters to images,
+   * and returns an array of Photo objects.
+   */
+  async function fetchPhotosForCategory(catKey: string): Promise<Photo[]> {
+    // GitHub Contents API endpoint for a folder
+    const url = `https://api.github.com/repos/mayamalka/my-wedding-gallery/contents/${catKey}`;
 
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.error(`Failed to fetch folder "${catKey}" → ${res.status}`);
+        return [];
+      }
+      const items: Array<{
+        name: string;
+        path: string;
+        download_url: string | null;
+        type: string;
+      }> = await res.json();
+
+      // Filter only files with download_url (i.e. skip subfolders or non-files)
+      // and only common image extensions
+      return items
+        .filter(
+          (item) =>
+            item.type === "file" &&
+            item.download_url &&
+            /\.(jpe?g|png|gif|webp)$/i.test(item.name)
+        )
+        .map((item) => {
+          // Derive a human-friendly alt from the filename, e.g. "engagement1.jpg" → "Engagement1"
+          const rawName = item.name.replace(/\.[^.]+$/, ""); // remove extension
+          const altText = rawName.replace(/[-_]/g, " "); // replace dashes/underscores
+          const alt =
+            altText.charAt(0).toUpperCase() + altText.slice(1); // capitalize first letter
+
+          return {
+            src: item.download_url!,
+            alt,
+            category: catKey,
+          };
+        });
+    } catch (err) {
+      console.error("Error fetching GitHub folder:", err);
+      return [];
+    }
+  }
+
+  /**
+   * Whenever selectedCategory changes, load photos.
+   * - If "all": fetch each category folder (excluding "all") in parallel.
+   * - Otherwise: fetch just that one folder.
+   */
+  useEffect(() => {
+    async function loadPhotos() {
+      if (selectedCategory === "all") {
+        // Fetch each real category in parallel (excluding "all")
+        const realCats = categories
+          .map((c) => c.key)
+          .filter((key) => key !== "all");
+
+        // Kick off all fetches simultaneously
+        const arraysOfPhotos = await Promise.all(
+          realCats.map((catKey) => fetchPhotosForCategory(catKey))
+        );
+        // Flatten into one big array
+        const combined = arraysOfPhotos.flat();
+        setPhotos(combined);
+      } else {
+        // Just fetch the single chosen category folder
+        const arr = await fetchPhotosForCategory(selectedCategory);
+        setPhotos(arr);
+      }
+      setSelectedIndex(null);
+    }
+
+    loadPhotos();
+  }, [selectedCategory]);
+
+  // The currently open photo in the modal
   const selectedPhoto =
-    selectedIndex !== null ? filteredPhotos[selectedIndex] : null;
+    selectedIndex !== null && selectedIndex < photos.length
+      ? photos[selectedIndex]
+      : null;
 
+  // Navigate to previous photo in the filtered list
   const goPrevious = useCallback(() => {
-    if (selectedIndex !== null) {
+    if (selectedIndex !== null && photos.length > 0) {
       setSelectedIndex((prev) =>
-        prev! > 0 ? prev! - 1 : filteredPhotos.length - 1
+        prev! > 0 ? prev! - 1 : photos.length - 1
       );
     }
-  }, [selectedIndex, filteredPhotos.length]);
+  }, [selectedIndex, photos.length]);
 
+  // Navigate to next photo in the filtered list
   const goNext = useCallback(() => {
-    if (selectedIndex !== null) {
+    if (selectedIndex !== null && photos.length > 0) {
       setSelectedIndex((prev) =>
-        prev! < filteredPhotos.length - 1 ? prev! + 1 : 0
+        prev! < photos.length - 1 ? prev! + 1 : 0
       );
     }
-  }, [selectedIndex, filteredPhotos.length]);
+  }, [selectedIndex, photos.length]);
 
+  // Close the modal
   const closeDialog = useCallback(() => {
     setSelectedIndex(null);
   }, []);
 
-  // Keyboard navigation
+  // Keyboard navigation inside the modal
   useEffect(() => {
     if (selectedIndex === null) return;
 
@@ -112,7 +174,8 @@ export default function Gallery() {
     <Card className="p-8 mb-10 bg-white/85 border border-sky-100 shadow-lg">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-2">
-          Our Gallery • <span className="font-['Amatic_SC'] font-bold">הגלריה שלנו</span>
+          Our Gallery •{" "}
+          <span className="font-['Amatic_SC'] font-bold">הגלריה שלנו</span>
         </h2>
         <p className="font-['Montserrat'] text-gray-600 mb-2">
           Browse through our precious memories in different categories
@@ -138,7 +201,10 @@ export default function Gallery() {
             >
               <span className="hidden sm:inline">{category.label} • </span>
               <span className="sm:hidden">{category.label}</span>
-              <span className="font-['Heebo'] hidden sm:inline"> {category.labelHe}</span>
+              <span className="font-['Heebo'] hidden sm:inline">
+                {" "}
+                {category.labelHe}
+              </span>
             </button>
           ))}
         </div>
@@ -147,9 +213,9 @@ export default function Gallery() {
       {/* Photo Grid with Scroll */}
       <div className="max-h-96 sm:max-h-[32rem] overflow-y-auto scrollbar-thin scrollbar-thumb-sky-200 scrollbar-track-transparent">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 pr-2">
-          {filteredPhotos.map((photo, index) => (
+          {photos.map((photo, index) => (
             <div
-              key={`${photo.category}-${photo.src}-${index}`}
+              key={`${photo.src}-${index}`}
               className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg"
               onClick={() => setSelectedIndex(index)}
               tabIndex={0}
@@ -167,7 +233,12 @@ export default function Gallery() {
                 alt={photo.alt}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                sizes="
+                  (max-width: 640px) 50vw,
+                  (max-width: 768px) 33vw,
+                  (max-width: 1024px) 25vw,
+                  20vw
+                "
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
             </div>
@@ -176,7 +247,7 @@ export default function Gallery() {
       </div>
 
       {/* No photos message */}
-      {filteredPhotos.length === 0 && (
+      {photos.length === 0 && (
         <div className="text-center py-12">
           <p className="font-['Montserrat'] text-gray-500">
             No photos in this category yet

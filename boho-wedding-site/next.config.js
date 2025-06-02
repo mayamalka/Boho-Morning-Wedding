@@ -7,6 +7,7 @@ const nextConfig = {
       "images.unsplash.com",
       "ext.same-assets.com",
       "ugc.same-assets.com",
+      "mayamalka.github.io", // Add this line
     ],
     remotePatterns: [
       {
@@ -28,6 +29,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "ugc.same-assets.com",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "mayamalka.github.io", // Add this block
+        pathname: "/my-wedding-gallery/**",
       },
     ],
   },
