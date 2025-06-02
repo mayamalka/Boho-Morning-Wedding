@@ -30,7 +30,7 @@ export default function Gallery() {
   const categories = [
     { key: "all", label: "All Photos", labelHe: "כל התמונות" },
     { key: "engagement", label: "Engagement", labelHe: "אירוסין" },
-    { key: "save-the-date", label: "Save-the-Date" },
+    { key: "save-the-date", label: "Save-the-Date", labelHe: "הזמנה" },
     { key: "ceremony", label: "Ceremony", labelHe: "טקס" },
     { key: "reception", label: "Reception", labelHe: "קבלת פנים" },
     { key: "dance", label: "Dance", labelHe: "ריקודים" },
@@ -45,12 +45,6 @@ export default function Gallery() {
   const [subcategories, setSubcategories] = useState<string[]>([]);
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>("all");
 
-  // ── Fetched Groups ────────────────────────────────────────────────────────
-  // groups = [
-  //   { folder: "freddie", photos: Photo[] },
-  //   { folder: "genie", photos: Photo[] },
-  //   ...
-  // ]
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
