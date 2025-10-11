@@ -29,7 +29,6 @@ export default function Gallery() {
   const categories = [
     { key: "all", label: "All Photos", labelHe: "כל התמונות" },
     { key: "engagement", label: "Engagement", labelHe: "אירוסין" },
-    { key: "save-the-date", label: "Save-the-Date", labelHe: "הזמנה" },
     { key: "ceremony", label: "Ceremony", labelHe: "טקס" },
     { key: "reception", label: "Reception", labelHe: "קבלת פנים" },
     { key: "dance", label: "Dance", labelHe: "ריקודים" },
