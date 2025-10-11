@@ -85,7 +85,7 @@ const VideoOverlay: React.FC<VideoOverlayProps> = ({ onClose }) => {
             zIndex: 10,
           }}
         >
-          <source src="/videos/cats.mp4" type="video/mp4" />
+          <source src="/videos/save-the-date.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
