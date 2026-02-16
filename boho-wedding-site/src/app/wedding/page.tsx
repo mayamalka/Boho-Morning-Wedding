@@ -233,7 +233,7 @@ export default function WeddingSite() {
                 <div>
                   <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-4">RSVP</h2>
                   <p className="mb-2 font-['Montserrat']">Please let us know if you can join us on our special day!</p>
-                  <p className="mb-6 font-['Heebo'] text-sm font-light">אנא הודיעו לנו אם תוכלו להצטרף אלינו ביום המיוחד שלנו באמצעות הודעת הsms/whatsapp שנשלחה אליכם</p>
+                  <p className="mb-6 font-['Heebo'] text-sm font-light">אנא הודיעו לנו אם תוכלו להצטרף אלינו ביום המיוחד שלנו באמצעות הודעת הסמס\וואטצאפ שנשלחה אליכם</p>
                 </div>
                 {/* <Button
                   className="bg-sky-300 hover:bg-sky-400 text-white mx-auto"
@@ -493,7 +493,7 @@ export default function WeddingSite() {
                   </Button>
                   <div className="text-sm text-gray-600 font-['Montserrat'] text-center">
                     <p>Click the button, sign in to Google if needed, then drag & drop or use <b>New → File upload</b> to add your photos.<br/>Thank you for sharing your memories with us!</p>
-                    <p className="font-['Heebo'] mt-2">הקליקו, התחברו ל‑Google אם מתבקש, והעלו קבצים בגרירה או דרך <b>New → File upload</b>. תודה על השיתוף!</p>
+                    <p className="font-['Heebo'] mt-2">הקליקו, התחברו לחשבון הגוגל שלכם אם מתבקש, והעלו קבצים בגרירה או דרך <b>New → File upload</b>. תודה על השיתוף!</p>
                   </div>
                   <div className="mt-2 text-xs text-gray-500 font-['Montserrat'] italic">
                     <p>Accepted formats: JPG, PNG. Please keep each file under 10MB. Photos may appear in our public wedding album.</p>
