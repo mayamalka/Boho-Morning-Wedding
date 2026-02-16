@@ -233,14 +233,14 @@ export default function WeddingSite() {
                 <div>
                   <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-4">RSVP</h2>
                   <p className="mb-2 font-['Montserrat']">Please let us know if you can join us on our special day!</p>
-                  <p className="mb-6 font-['Heebo'] text-sm font-light">אנא הודיעו לנו אם תוכלו להצטרף אלינו ביום המיוחד שלנו</p>
+                  <p className="mb-6 font-['Heebo'] text-sm font-light">אנא הודיעו לנו אם תוכלו להצטרף אלינו ביום המיוחד שלנו באמצעות הודעת הsms/whatsapp שנשלחה אליכם</p>
                 </div>
-                <Button
+                {/* <Button
                   className="bg-sky-300 hover:bg-sky-400 text-white mx-auto"
                   onClick={() => window.open("https://example-rsvp-site.com", "_blank")}
                 >
                   RSVP Now • <span className="font-['Heebo']">אישור הגעה</span>
-                </Button>
+                </Button> */}
               </Card>
             </div>
 
@@ -348,7 +348,7 @@ export default function WeddingSite() {
                     </div>
                   </div>
 
-                  {/* 1:00 PM - Wedding Ceremony */}
+                  {/* 12:30 PM - Wedding Ceremony */}
                   <div className="flex items-center">
                     <div className="w-1/2 pr-10 text-right">
                       {/* Black icon: Rings */}
@@ -365,16 +365,16 @@ export default function WeddingSite() {
                       </svg>
                     </div>
                     <div className="w-1/2 pl-10">
-                      <p className="font-['Montserrat'] font-medium text-lg">1:00 PM</p>
+                      <p className="font-['Montserrat'] font-medium text-lg">12:30 PM</p>
                       <p className="font-['Great_Vibes'] text-xl tracking-wider text-gray-600">Wedding Ceremony</p>
                       <p className="font-['Heebo'] text-sm font-light mt-1 text-gray-500">טקס החופה</p>
                     </div>
                   </div>
 
-                  {/* 1:45 PM - Entrée Dish */}
+                  {/* 1:00 PM - Entrée Dish */}
                   <div className="flex items-center">
                     <div className="w-1/2 pr-10 text-right">
-                      <p className="font-['Montserrat'] font-medium text-lg">1:45 PM</p>
+                      <p className="font-['Montserrat'] font-medium text-lg">1:00 PM</p>
                       <p className="font-['Great_Vibes'] text-xl tracking-wider text-gray-600">Entrée Dish</p>
                       <p className="font-['Heebo'] text-sm font-light mt-1 text-gray-500">מנה ראשונה</p>
                     </div>
@@ -392,7 +392,7 @@ export default function WeddingSite() {
                     </div>
                   </div>
 
-                  {/* 2:00 PM - First Dance */}
+                  {/* 1:20 PM - First Dance */}
                   <div className="flex items-center">
                     <div className="w-1/2 pr-10 text-right">
                       {/* Black icon: Dancing couple */}
@@ -407,16 +407,16 @@ export default function WeddingSite() {
                       <Music className="h-4 w-4 text-sky-400" />
                     </div>
                     <div className="w-1/2 pl-10">
-                      <p className="font-['Montserrat'] font-medium text-lg">2:00 PM</p>
+                      <p className="font-['Montserrat'] font-medium text-lg">1:20 PM</p>
                       <p className="font-['Great_Vibes'] text-xl tracking-wider text-gray-600">First Dance</p>
                       <p className="font-['Heebo'] text-sm font-light mt-1 text-gray-500">ריקוד ראשון</p>
                     </div>
                   </div>
 
-                  {/* 2:30 PM - Main Dish */}
+                  {/* 1:45 PM - Main Dish */}
                   <div className="flex items-center">
                     <div className="w-1/2 pr-10 text-right">
-                      <p className="font-['Montserrat'] font-medium text-lg">2:30 PM</p>
+                      <p className="font-['Montserrat'] font-medium text-lg">1:45 PM</p>
                       <p className="font-['Great_Vibes'] text-xl tracking-wider text-gray-600">Main Dish</p>
                       <p className="font-['Heebo'] text-sm font-light mt-1 text-gray-500">מנה עיקרית</p>
                     </div>
@@ -429,7 +429,7 @@ export default function WeddingSite() {
                       <HandPlatter className="h-12 w-12 text-gray-400" strokeWidth={1} />
                     </div>
                   </div>
-                  {/* 4:00 PM - Dessert */}
+                  {/* 3:00 PM - Dessert */}
                   <div className="flex items-center">
                     <div className="w-1/2 pr-10 text-right">
                       {/* Black icon: Cake */}
@@ -442,15 +442,15 @@ export default function WeddingSite() {
                       <ChefHat className="h-4 w-4 text-sky-400" />
                     </div>
                     <div className="w-1/2 pl-10">
-                      <p className="font-['Montserrat'] font-medium text-lg">4:00 PM</p>
+                      <p className="font-['Montserrat'] font-medium text-lg">3:00 PM</p>
                       <p className="font-['Great_Vibes'] text-xl tracking-wider text-gray-600">Dessert</p>
                       <p className="font-['Heebo'] text-sm font-light mt-1 text-gray-500">קינוח</p>
                     </div>
                   </div>
-                  {/* 4:30 PM - After Party */}
+                  {/* 4:00 PM - After Party */}
                   <div className="flex items-center">
                     <div className="w-1/2 pr-10 text-right">
-                      <p className="font-['Montserrat'] font-medium text-lg">4:30 PM</p>
+                      <p className="font-['Montserrat'] font-medium text-lg">4:00 PM</p>
                       <p className="font-['Great_Vibes'] text-xl tracking-wider text-gray-600">After Party</p>
                       <p className="font-['Heebo'] text-sm font-light mt-1 text-gray-500">אפטר פארטי</p>
                     </div>
@@ -499,7 +499,7 @@ export default function WeddingSite() {
 
                   <Button
                     className="bg-sky-300 hover:bg-sky-400 text-white px-8 py-4 rounded-full shadow-md"
-                    onClick={() => window.open("https://example-photo-app.com", "_blank")}
+                    onClick={() => window.open("https://drive.google.com/drive/folders/1DG0MNfwnzsFMJk5kBScpqa4kZdEFyuDH", "_blank")}
                   >
                     Get the App • <span className="font-['Heebo']">קבל את האפליקציה</span>
                   </Button>
