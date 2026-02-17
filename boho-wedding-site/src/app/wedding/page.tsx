@@ -284,7 +284,7 @@ export default function WeddingSite() {
                 <p className="mb-6 font-['Heebo'] text-sm font-light">הצטרפו לקבוצת הוואטסאפ שלנו כדי לתאם הסעות וטרמפים לחתונה ובחזרה</p>
               </div>
               <Button className="bg-green-500 hover:bg-green-600 text-white mx-auto flex items-center gap-2"
-                onClick={() => window.open("https://chat.whatsapp.com/YOUR_GROUP_LINK", "_blank")}
+                onClick={() => window.open("https://chat.whatsapp.com/GMlV4CBkVdXH0RkKDF1M1s", "_blank")}
               >
                 <Image
                   src="/images/whatsapp-icon.png"
