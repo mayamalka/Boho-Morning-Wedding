@@ -22,6 +22,7 @@ export default function WeddingSite() {
   const timelineRef = useRef<HTMLDivElement>(null);
   const photosRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const rideshareRef = useRef<HTMLDivElement>(null);
 
   // Function to scroll to a section
   const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
@@ -107,6 +108,12 @@ export default function WeddingSite() {
                 className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
               >
                 RSVP
+              </button>
+              <button
+                onClick={() => scrollToSection(rideshareRef)}
+                className="text-sky-300 hover:text-sky-500 font-['Montserrat'] text-sm md:text-base px-2 py-1 whitespace-nowrap"
+              >
+                Ride Share
               </button>
               <button
                 onClick={() => scrollToSection(playlistRef)}
@@ -266,6 +273,29 @@ export default function WeddingSite() {
                   </Button>
               </Card>
             </div>
+          </div>
+
+          {/* Ride Sharing WhatsApp Group Section */}
+          <div ref={rideshareRef} className="pt-16 -mt-16 mb-10" id="rideshare">
+            <Card className="p-8 text-center bg-white/85 border border-sky-100 shadow-lg h-full flex flex-col justify-between">
+              <div>
+                <h2 className="text-3xl font-['Cormorant_Garamond'] text-sky-400 mb-4">Ride Sharing Group</h2>
+                <p className="mb-2 font-['Montserrat']">Join our WhatsApp group to coordinate rides to and from the wedding!</p>
+                <p className="mb-6 font-['Heebo'] text-sm font-light">הצטרפו לקבוצת הוואטסאפ שלנו כדי לתאם הסעות וטרמפים לחתונה ובחזרה</p>
+              </div>
+              <Button className="bg-green-500 hover:bg-green-600 text-white mx-auto flex items-center gap-2"
+                onClick={() => window.open("https://chat.whatsapp.com/YOUR_GROUP_LINK", "_blank")}
+              >
+                <Image
+                  src="/images/whatsapp-icon.png"
+                  alt="WhatsApp"
+                  width={24}
+                  height={24}
+                  className="object-contain"
+                />
+                <span>Join WhatsApp Group • <span className="font-['Heebo']">הצטרפות לקבוצה</span></span>
+              </Button>
+            </Card>
           </div>
 
           {/* Dress Code Section - Fixed for mobile */}
@@ -434,7 +464,7 @@ export default function WeddingSite() {
                     <div className="w-1/2 pr-10 text-right">
                       {/* Black icon: Cake */}
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
                       </svg>
                     </div>
                     <div className="absolute left-1/2 -ml-4 w-8 h-8 bg-white border-2 border-sky-200 rounded-full flex items-center justify-center">
