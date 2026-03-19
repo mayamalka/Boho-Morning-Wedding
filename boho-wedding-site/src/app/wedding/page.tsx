@@ -170,7 +170,7 @@ export default function WeddingSite() {
                 <div>
                   <h3 className="text-sky-400 text-2xl font-['Cormorant_Garamond'] mb-2">When • <span className="font-['Amatic_SC'] font-bold">מתי</span></h3>
                   <p className="font-['Montserrat'] text-xl mb-1">April 24, 2026 • 24.4.2026</p>
-                  <p className="font-['Heebo'] text-lg font-light">יום שישי, כ״ו באדר ב׳ תשפ״ו</p>
+                  <p className="font-['Heebo'] text-lg font-light">יום שישי, ז׳ באייר תשפ״ו</p>
                   <p className="font-['Montserrat'] mt-2">11:00 AM</p>
                 </div>
                 <div>
