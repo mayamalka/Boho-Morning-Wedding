@@ -260,7 +260,7 @@ export default function WeddingSite() {
                   <p className="mb-6 font-['Heebo'] text-sm font-light">עזרו לנו ליצור את הפלייליסט המושלם לחגיגה שלנו</p>
                 </div>
                   <Button className="bg-sky-300 hover:bg-sky-400 text-white mx-auto flex items-center gap-2" 
-                  onClick={() => window.open("https://open.spotify.com/playlist/5QwjNLFkyrClLVctm9DTK6?si=SaeIoD9iToGSXFhzCHTsdQ&pt=918a6e694ed98fe9a23ec60398ce356d&pi=2BmjLQdKQsu0k", "_blank")}
+                  onClick={() => window.open("https://open.spotify.com/playlist/5QwjNLFkyrClLVctm9DTK6?si=f0aac0bb5a294961&pt=1477c7bb13a1af35c85001f50932170c", "_blank")}
                   >
                     <Image
                       src="/images/spotify-icon.png"
